@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +51,8 @@ public class StatementService {
 		if(CollectionUtils.isNotEmpty(transactions)) {
 			Double totalAmt = transactions.get(transactions.size() - 1).getTotalAmount();
 			Transaction transaction = this.processInterestTransaction(month, totalAmt);
-			transactions.add(transaction);
+			List<Transaction> transactionList = new ArrayList<>(transactions);
+			transactionList.add(transaction);
 			printData.printStatementTable(accNo, transactions);
 		} else {
 			System.out.println("Account does not have any transaction details for the month.");
