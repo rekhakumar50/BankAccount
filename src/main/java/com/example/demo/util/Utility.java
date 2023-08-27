@@ -2,6 +2,8 @@ package com.example.demo.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Utility {
@@ -29,4 +31,26 @@ public class Utility {
 		return month.matches("(^0?[1-9]$)|(^1[0-2]$)");
 	}
 	
+	
+	public static int getLastDayOfMonth(int month) {
+	    Calendar cal = Calendar.getInstance();
+	    cal.set(Calendar.MONTH, month);
+	    return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+	
+	
+	public static int getCurrentYear() {
+		Calendar instance = Calendar.getInstance();
+        return instance.get(Calendar.YEAR);
+	}
+	
+	
+	public static int getLengthOfYear() {
+		return LocalDate.now().lengthOfYear();
+	}
+	
+	
+	public static Date convertStringToDate(final String date) throws ParseException {
+		return new SimpleDateFormat("yyyyMMdd").parse(date);
+	}
 }

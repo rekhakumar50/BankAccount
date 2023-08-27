@@ -71,11 +71,11 @@ public class TransactionService {
 	private String computeTransactionId(String date) {
 		String transactionId = transactionRepository.getTransactionIdByDate(date);
 		if(StringUtils.isNotEmpty(transactionId)) {
-			int id = Integer.valueOf(transactionId.split("_")[1])+1;
-			return date+"_"+id;
+			int id = Integer.valueOf(transactionId.split("-")[1])+1;
+			return date+"-"+id;
 		}
 		
-		return date+"_"+1;
+		return date+"-"+1;
 	}	
 
 }

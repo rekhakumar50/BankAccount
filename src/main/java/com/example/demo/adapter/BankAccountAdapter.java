@@ -16,6 +16,8 @@ import com.example.demo.util.Utility;
 @Component
 public class BankAccountAdapter implements CommandLineRunner {
 	
+	private static Scanner stdin = new Scanner(System.in);
+	
 	@Autowired
 	private StatementService statementService;
 		
@@ -65,7 +67,7 @@ public class BankAccountAdapter implements CommandLineRunner {
         		+ "[P]rint statement\r\n"
         		+ "[Q]uit\r\n"
         		+ ">");
-        return new Scanner(System.in).nextLine();
+        return stdin.nextLine();
 	}
 	
 	
@@ -73,7 +75,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 		System.out.print("Please enter account and month to generate the statement <Account>|<Month>\r\n"
     			+ "(or enter blank to go back to main menu):\r\n"
     			+ ">");
-    	String input = new Scanner(System.in).nextLine();
+    	String input = stdin.nextLine();
+    	if(StringUtils.isBlank(input))  {
+        	this.processOptions();
+    	}
     	this.validateMonth(input);
     	statementService.processStatement(input);
         System.out.println("Is there anything else you'd like to do?");
@@ -81,12 +86,26 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 	
 	
-	private void validateMonth(final String input) throws ParseException {
+	private void validateMonth(final String input) throws ParseException {		
 		String[] inputArr = StringUtils.split(input, "|");
+		String accNo = inputArr[0];
+		String month = inputArr[1];
 		
-		if(!Utility.validateMonth(inputArr[1])) {
+		if(!Utility.validateMonth(month)) {
 			System.out.println("Enter valid month");
 			this.printStatement();
+		} else {
+			String accStartDate = statementService.getAccStartDate(accNo);
+			if(StringUtils.isNotEmpty(accStartDate)) {
+				int accStartMonth = Integer.valueOf(StringUtils.substring(accStartDate, 4,6));
+				if(accStartMonth > Integer.valueOf(month)) {
+					System.out.println("Account started on " + accStartMonth + "th month. Please enter a valid month.");
+					this.printStatement();
+				}
+			} else {
+				System.out.println("Enter valid Account Number");
+				this.printStatement();
+			}
 		}
 	}
 	
@@ -95,7 +114,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 		System.out.print("Please enter transaction details in <Date>|<Account>|<Type>|<Amount> format \r\n"
     			+ "(or enter blank to go back to main menu):\r\n"
     			+ ">");
-    	String input = new Scanner(System.in).nextLine();
+    	String input = stdin.nextLine();
+    	if(StringUtils.isBlank(input))  {
+        	this.processOptions();
+    	}
     	this.validateInputTransaction(input);
     	transactionService.processTransaction(input);
         System.out.println("Is there anything else you'd like to do?");
@@ -128,7 +150,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 		System.out.print("Please enter interest rules details in <Date>|<RuleId>|<Rate in %> format \r\n"
 				+ "(or enter blank to go back to main menu):\r\n"
 				+ ">");
-    	String input = new Scanner(System.in).nextLine();
+    	String input = stdin.nextLine();
+    	if(StringUtils.isBlank(input))  {
+        	this.processOptions();
+    	}
     	this.validateInterestRules(input);
     	ruleService.processRules(input);
         System.out.println("Is there anything else you'd like to do?");
