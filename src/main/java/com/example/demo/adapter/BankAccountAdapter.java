@@ -112,7 +112,7 @@ public class BankAccountAdapter implements CommandLineRunner {
 		} else {
 			String accStartDate = statementService.getAccStartDate(accNo);
 			if(StringUtils.isNotEmpty(accStartDate)) {
-				int accStartMonth = Integer.valueOf(StringUtils.substring(accStartDate, 4,6));
+				int accStartMonth = Integer.valueOf(StringUtils.substring(accStartDate, 4, 6));
 				if(accStartMonth > Integer.valueOf(month)) {
 					System.out.println("Account opened on " + accStartMonth + "th month. Please enter a valid month.");
 					this.printStatement();
