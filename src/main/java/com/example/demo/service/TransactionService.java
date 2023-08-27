@@ -88,7 +88,7 @@ public class TransactionService {
 			return date + HYPHEN + String.format("%02d", id);
 		}
 		
-		return date + HYPHEN + 01;
+		return date + HYPHEN + String.format("%02d", 1);
 	}	
 
 }
