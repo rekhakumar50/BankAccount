@@ -35,6 +35,10 @@ public class BankAccountAdapter implements CommandLineRunner {
      }
 	
 	
+	/**
+	 * Processing function's options
+	 * @throws ParseException
+	 */
 	private void processOptions() throws ParseException {
 		String line = this.getOptions();
         switch(line.toLowerCase()) {
@@ -61,16 +65,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 	
 	
-	private String getOptions() {
-		System.out.print("[I]nput transactions \r\n"
-        		+ "[D]efine interest rules\r\n"
-        		+ "[P]rint statement\r\n"
-        		+ "[Q]uit\r\n"
-        		+ ">");
-        return stdin.nextLine();
-	}
-	
-	
+	/**
+	 * Processing printStatement by getting input, validating and processing it
+	 * @throws ParseException
+	 */
 	private void printStatement() throws ParseException  {
 		System.out.print("Please enter account and month to generate the statement <Account>|<Month>\r\n"
     			+ "(or enter blank to go back to main menu):\r\n"
@@ -79,15 +77,30 @@ public class BankAccountAdapter implements CommandLineRunner {
     	if(StringUtils.isBlank(input))  {
         	this.processOptions();
     	}
-    	this.validateMonth(input);
+    	this.validatePrintStatement(input);
     	statementService.processStatement(input);
         System.out.println("Is there anything else you'd like to do?");
     	this.processOptions();
 	}
 	
 	
-	private void validateMonth(final String input) throws ParseException {		
+	/**
+	 * Validating printStatement input
+	 * 
+	 * @param input
+	 * @throws ParseException
+	 */
+	private void validatePrintStatement(final String input) throws ParseException {
+		if(StringUtils.containsNone(input, "|")) {
+			System.out.println("Enter Valid Input");
+			this.printStatement();
+		}
+		
 		String[] inputArr = StringUtils.split(input, "|");
+		if(inputArr.length != 2) {
+			System.out.println("Enter Valid Input");
+			this.printStatement();
+		}
 		String accNo = inputArr[0];
 		String month = inputArr[1];
 		
@@ -110,6 +123,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 	
 	
+	/**
+	 * Processing inputTransaction by getting input, validating and processing it
+	 * @throws ParseException
+	 */
 	private void inputTransaction() throws ParseException {
 		System.out.print("Please enter transaction details in <Date>|<Account>|<Type>|<Amount> format \r\n"
     			+ "(or enter blank to go back to main menu):\r\n"
@@ -125,8 +142,23 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 	
 	
+	/**
+	 * Validating transaction input
+	 * 
+	 * @param input
+	 * @throws ParseException
+	 */
 	private void validateInputTransaction(final String input) throws ParseException {
+		if(StringUtils.containsNone(input, "|")) {
+			System.out.println("Enter Valid Input");
+			this.inputTransaction();
+		}
+		
 		String[] inputArr = StringUtils.split(input, "|");
+		if(inputArr.length != 4) {
+			System.out.println("Enter Valid Input");
+			this.inputTransaction();
+		}
 		
 		if(!Utility.validateDate(inputArr[0])) {
 			System.out.println("Date should be in YYYYMMdd format");
@@ -146,6 +178,10 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 
 	
+	/**
+	 * Processing interestRules by getting input, validating and processing it
+	 * @throws ParseException
+	 */
 	private void interestRules() throws ParseException {
 		System.out.print("Please enter interest rules details in <Date>|<RuleId>|<Rate in %> format \r\n"
 				+ "(or enter blank to go back to main menu):\r\n"
@@ -161,8 +197,23 @@ public class BankAccountAdapter implements CommandLineRunner {
 	}
 	
 	
+	/**
+	 * Validating interest Rules input
+	 * 
+	 * @param input
+	 * @throws ParseException
+	 */
 	private void validateInterestRules(final String input) throws ParseException {
+		if(StringUtils.containsNone(input, "|")) {
+			System.out.println("Enter Valid Input");
+			this.inputTransaction();
+		}
+		
 		String[] inputArr = StringUtils.split(input, "|");
+		if(inputArr.length != 3) {
+			System.out.println("Enter Valid Input");
+			this.inputTransaction();
+		}
 		
 		if(!Utility.validateDate(inputArr[0])) {
 			System.out.println("Date should be in YYYYMMdd format");
@@ -175,6 +226,20 @@ public class BankAccountAdapter implements CommandLineRunner {
 		if(!(Utility.validateDate(inputArr[0]) && Utility.validateInterestRate(inputArr[2]))) {
 			this.interestRules();
 		}
+	}
+	
+	
+	/**
+	 * Printing function's options
+	 * @return
+	 */
+	private String getOptions() {
+		System.out.print("[I]nput transactions \r\n"
+        		+ "[D]efine interest rules\r\n"
+        		+ "[P]rint statement\r\n"
+        		+ "[Q]uit\r\n"
+        		+ ">");
+        return stdin.nextLine();
 	}
 	
 }

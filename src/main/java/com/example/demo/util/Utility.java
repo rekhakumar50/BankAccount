@@ -17,9 +17,14 @@ public class Utility {
 	}
 	
 	public static boolean validateDate(final String date) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		Date formatedDate = sdf.parse(date);
-		return sdf.format(formatedDate).equals(date) && new Date().after(formatedDate);
+		boolean isDateValid = false;
+		if(date.matches("[0-9]+") && date.length() == 8) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			Date formatedDate = sdf.parse(date);
+			isDateValid = sdf.format(formatedDate).equals(date) && new Date().after(formatedDate);
+		}
+		
+		return isDateValid;
 	}
 	
 	public static boolean validateInterestRate(final String interestRate) {
@@ -49,8 +54,4 @@ public class Utility {
 		return LocalDate.now().lengthOfYear();
 	}
 	
-	
-	public static Date convertStringToDate(final String date) throws ParseException {
-		return new SimpleDateFormat("yyyyMMdd").parse(date);
-	}
 }
