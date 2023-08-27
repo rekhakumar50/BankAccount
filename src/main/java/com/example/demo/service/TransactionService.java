@@ -39,7 +39,7 @@ public class TransactionService {
 		boolean isAccNoExist = transactionRepository.existsByAccNo(transactionDto.getAccNo());
 		
 		if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_W)) {
-			System.out.println("Cannot create the account as the tranaction type is Withdraw!!");
+			System.out.println("Cannot create the account with the tranaction type as Withdraw!!");
 			
 		} else if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_D)) {
 			transaction = TransactionMapper.convertToTransaction(
