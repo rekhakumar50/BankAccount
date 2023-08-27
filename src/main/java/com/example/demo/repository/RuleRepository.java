@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,9 @@ public interface RuleRepository extends JpaRepository<Rule, Long> {
 
 	Optional<Rule> findByDateAndRuleId(String date, String ruleId);
 	
-	@Query(value = "SELECT r.rate FROM Rules r where r.date <= :date ORDER BY r.id DESC LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT r.rate FROM Rules r where r.date <= :date ORDER BY r.date DESC LIMIT 1", nativeQuery = true)
 	Double getRateByDate(@Param("date") String date);
+	
+	List<Rule> findAllByOrderByDateAsc();
 
 }

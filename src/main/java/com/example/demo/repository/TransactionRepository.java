@@ -12,8 +12,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	
 	List<Transaction> findByAccNo(String accNo);
 
-    @Query(value = "SELECT t.total_amount FROM Transactions t where t.date <= :date ORDER BY t.id DESC LIMIT 1", nativeQuery = true)
-	Double getTotalAmountByDate(@Param("date") String date);
+    @Query(value = "SELECT t.total_amount FROM Transactions t where t.acc_no = :accNo and t.date <= :date ORDER BY t.id DESC LIMIT 1", nativeQuery = true)
+	Double getTotalAmountByDate(@Param("accNo") String accNo, @Param("date") String date);
     
     @Query(value = "SELECT t.transaction_id FROM Transactions t where t.date = :date ORDER BY t.id DESC LIMIT 1", nativeQuery = true)
 	String getTransactionIdByDate(@Param("date") String date);

@@ -48,7 +48,7 @@ public class TransactionService {
 					this.computeTransactionId(transactionDto.getDate()));
 			
 		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_W)) {
-			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getDate());
+			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getAccNo(), transactionDto.getDate());
 			Double updateTotalAmount = totalAmount - transactionDto.getAmount();
 			if(updateTotalAmount < 0) {
 				System.out.println("Cannot withdraw, account balance is low!!");
@@ -59,7 +59,7 @@ public class TransactionService {
 						this.computeTransactionId(transactionDto.getDate()));
 			}
 		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_D)) {
-			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getDate());
+			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getAccNo(), transactionDto.getDate());
 			Double updateTotalAmount = totalAmount + transactionDto.getAmount();
 			transaction = TransactionMapper.convertToTransaction(
 					transactionDto, 

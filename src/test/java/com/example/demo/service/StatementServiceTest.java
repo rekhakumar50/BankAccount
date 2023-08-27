@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class StatementServiceTest {
 		utilityStatic.when(() -> Utility.getLastDayOfMonth(anyInt())).thenReturn(30);
 
 		when(transactionRepository.findByAccNoAndDateLike(anyString(), anyString())).thenReturn(getTransactions());
-		when(transactionRepository.getTotalAmountByDate(anyString())).thenReturn(100.00);
+		when(transactionRepository.getTotalAmountByDate(anyString(), anyString())).thenReturn(100.00);
 		when(ruleRepository.getRateByDate(anyString())).thenReturn(2.20);
 
 		statementService.processStatement("AC001|06");
@@ -84,7 +85,7 @@ public class StatementServiceTest {
 
 		when(transactionRepository.findByAccNoAndDateLike(anyString(), anyString())).thenReturn(null);
 		when(transactionRepository.findByAccNoAndDate(anyString(), anyString())).thenReturn(t1);
-		when(transactionRepository.getTotalAmountByDate(anyString())).thenReturn(100.00);
+		when(transactionRepository.getTotalAmountByDate(anyString(), anyString())).thenReturn(100.00);
 		when(ruleRepository.getRateByDate(anyString())).thenReturn(2.20);
 
 		statementService.processStatement("AC001|06");
@@ -98,7 +99,7 @@ public class StatementServiceTest {
 		Transaction t2 = getTransaction("20230626","20230626-01","W",20.00,230.00);
 		Transaction t3 = getTransaction("20230626","20230626-02","W",100.00,130.00);
 		
-		return Arrays.asList(t1, t2, t3);
+		return new ArrayList<>(Arrays.asList(t1, t2, t3));
 	}
 	
 	private Transaction getTransaction(String Date, String transactionId, String transactionType, Double amount, Double totalAmount) {

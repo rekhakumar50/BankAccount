@@ -90,7 +90,7 @@ public class TransactionServiceTest {
 
 		when(transactionRepository.getTransactionIdByDate(anyString())).thenReturn("20230626-01");
 		when(transactionRepository.existsByAccNo(anyString())).thenReturn(true);
-		when(transactionRepository.getTotalAmountByDate(anyString())).thenReturn(150.00);
+		when(transactionRepository.getTotalAmountByDate(anyString(), anyString())).thenReturn(150.00);
 
 		
 		transactionService.processTransaction("20230626|AC001|W|100.00");
@@ -111,7 +111,7 @@ public class TransactionServiceTest {
 
 		when(transactionRepository.getTransactionIdByDate(anyString())).thenReturn("20230626-01");
 		when(transactionRepository.existsByAccNo(anyString())).thenReturn(true);
-		when(transactionRepository.getTotalAmountByDate(anyString())).thenReturn(90.00);
+		when(transactionRepository.getTotalAmountByDate(anyString(), anyString())).thenReturn(90.00);
 		
 		transactionService.processTransaction("20230626|AC001|W|100.00");
 		verify(transactionRepository, Mockito.times(0)).save(Mockito.any());
@@ -131,7 +131,7 @@ public class TransactionServiceTest {
 
 		when(transactionRepository.getTransactionIdByDate(anyString())).thenReturn("20230626-01");
 		when(transactionRepository.existsByAccNo(anyString())).thenReturn(true);
-		when(transactionRepository.getTotalAmountByDate(anyString())).thenReturn(90.00);
+		when(transactionRepository.getTotalAmountByDate(anyString(), anyString())).thenReturn(90.00);
 		
 		transactionService.processTransaction("20230626|AC001|D|100.00");
 		verify(transactionRepository, Mockito.times(1)).save(Mockito.any());

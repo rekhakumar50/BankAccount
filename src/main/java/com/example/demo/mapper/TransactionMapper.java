@@ -37,7 +37,7 @@ public class TransactionMapper {
 	public static Transaction convertToTransaction(TransactionDto transactionDto, Double totalAmount, String transactionId) {
 		Transaction transaction = new Transaction();
 		transaction.setAccNo(transactionDto.getAccNo());
-		transaction.setTransactionType(transactionDto.getTransactionType());
+		transaction.setTransactionType(transactionDto.getTransactionType().toUpperCase());
 		transaction.setDate(transactionDto.getDate());
 		transaction.setAmount(transactionDto.getAmount());
 		transaction.setTransactionId(transactionId);

@@ -41,7 +41,7 @@ public class RuleService {
 		
 		if(Objects.nonNull(rule)) {
 			ruleRepository.save(rule);
-			List<Rule> rules = ruleRepository.findAll();
+			List<Rule> rules = ruleRepository.findAllByOrderByDateAsc();
 			printData.printRuleTable(rules);
 		}
 	}
