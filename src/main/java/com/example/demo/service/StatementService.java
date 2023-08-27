@@ -45,19 +45,28 @@ public class StatementService {
 		String month = inputArr[1];
 		
 		int currentYear = Utility.getCurrentYear();
-	
+		
 		List<Transaction> transactions = transactionRepository.findByAccNoAndDateLike(accNo, currentYear + month + DOUBLE_UNDERSCORE);
-		if(CollectionUtils.isNotEmpty(transactions)) {
+
+		if(Utility.isNotEndOfCurrentMonth(Integer.valueOf(month)) && CollectionUtils.isNotEmpty(transactions)) {
+			printData.printStatementTable(accNo, transactions);
+			
+		} else if(Utility.isNotEndOfCurrentMonth(Integer.valueOf(month)) && CollectionUtils.isEmpty(transactions)) {
+			System.out.println("Account does not have any transaction details for the current month.");
+			
+		} else if(!Utility.isNotEndOfCurrentMonth(Integer.valueOf(month)) && CollectionUtils.isNotEmpty(transactions)) {
 			Double totalAmt = transactions.get(transactions.size() - 1).getTotalAmount();
 			Transaction transaction = this.processInterestTransaction(accNo, month, totalAmt);
 			transactions.add(transaction);
 			printData.printStatementTable(accNo, transactions);
-		} else {
+			
+		} else if(!Utility.isNotEndOfCurrentMonth(Integer.valueOf(month)) && CollectionUtils.isEmpty(transactions))  {
 			System.out.println("Account does not have any transaction details for the month.");
 			Transaction transaction = transactionRepository.findByAccNoAndDate(accNo, currentYear + month + ZERO_ONE);
 			List<Transaction> transactionList = Arrays.asList(this.processInterestTransaction(accNo, month, transaction.getTotalAmount()));
 			printData.printStatementTable(accNo, transactionList);
 		}
+		
 	}
 	
 	
@@ -70,7 +79,7 @@ public class StatementService {
 	private Transaction processInterestTransaction(final String accNo, final String month, final Double totalAmt) {
 		Double totalInterest = 0.0;
 		int currentYear = Utility.getCurrentYear();
-		int lastDateOfMonth = Utility.getLastDayOfMonth(Integer.valueOf(month)-1);
+		int lastDateOfMonth = Utility.getLastDayOfMonth(Integer.valueOf(month) - 1);
 		
 		String lastDayOfMonth = currentYear+month+lastDateOfMonth;
 		

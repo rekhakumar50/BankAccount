@@ -56,4 +56,10 @@ public class Utility {
 		return LocalDate.now().lengthOfYear();
 	}
 	
+	
+	public static boolean isNotEndOfCurrentMonth(int month) {
+		return Calendar.getInstance().get(Calendar.DATE) < Utility.getLastDayOfMonth(Integer.valueOf(month) - 1)
+				&& month == Calendar.getInstance().get(Calendar.MONTH) + 1;
+	}
+	
 }

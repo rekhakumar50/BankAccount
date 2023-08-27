@@ -1,6 +1,7 @@
 package com.example.demo.adapter;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
@@ -108,6 +109,9 @@ public class BankAccountAdapter implements CommandLineRunner {
 		
 		if(!Utility.validateMonth(month)) {
 			System.out.println("Enter Valid Month");
+			this.printStatement();
+		} else if(Integer.valueOf(month) > Calendar.getInstance().get(Calendar.MONTH) + 1) {
+			System.out.println("Month should not be greater than current month. Enter valid month.");
 			this.printStatement();
 		} else {
 			String accStartDate = statementService.getAccStartDate(accNo);
