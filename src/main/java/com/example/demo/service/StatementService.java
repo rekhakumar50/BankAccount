@@ -16,6 +16,12 @@ import com.example.demo.repository.RuleRepository;
 import com.example.demo.repository.TransactionRepository;
 import com.example.demo.util.Utility;
 
+import static com.example.demo.constant.Constants.DOUBLE_UNDERSCORE;
+import static com.example.demo.constant.Constants.ZERO_ONE;
+import static com.example.demo.constant.Constants.CAP_I;
+import static com.example.demo.constant.Constants.EMPTY_STRING;
+import static com.example.demo.constant.Constants.PIPE;
+
 @Service
 public class StatementService {
 	
@@ -29,14 +35,18 @@ public class StatementService {
 	private PrintDataAdapter printData;
 	
 
+	/**
+	 * Print statement
+	 * @param input
+	 */
 	public void processStatement(final String input) {
-		String[] inputArr = StringUtils.split(input, "|");
+		String[] inputArr = StringUtils.split(input, PIPE);
 		String accNo = inputArr[0];
 		String month = inputArr[1];
 		
 		int currentYear = Utility.getCurrentYear();
 	
-		List<Transaction> transactions = transactionRepository.findByAccNoAndDateLike(accNo, currentYear+month+"__");
+		List<Transaction> transactions = transactionRepository.findByAccNoAndDateLike(accNo, currentYear + month + DOUBLE_UNDERSCORE);
 		if(CollectionUtils.isNotEmpty(transactions)) {
 			Double totalAmt = transactions.get(transactions.size() - 1).getTotalAmount();
 			Transaction transaction = this.processInterestTransaction(month, totalAmt);
@@ -44,14 +54,20 @@ public class StatementService {
 			printData.printStatementTable(accNo, transactions);
 		} else {
 			System.out.println("Account does not have any transaction details for the month.");
-			Transaction transaction = transactionRepository.findByAccNoAndDate(accNo, currentYear+month+"01");
+			Transaction transaction = transactionRepository.findByAccNoAndDate(accNo, currentYear + month + ZERO_ONE);
 			List<Transaction> transactionList = Arrays.asList(this.processInterestTransaction(month, transaction.getTotalAmount()));
 			printData.printStatementTable(accNo, transactionList);
 		}
 	}
 	
 	
-	public Transaction processInterestTransaction(final String month, final Double totalAmt) {
+	/**
+	 * Process interest rate for transactions
+	 * @param month
+	 * @param totalAmt
+	 * @return
+	 */
+	private Transaction processInterestTransaction(final String month, final Double totalAmt) {
 		Double totalInterest = 0.0;
 		int currentYear = Utility.getCurrentYear();
 		int lastDateOfMonth = Utility.getLastDayOfMonth(Integer.valueOf(month)-1);
@@ -63,7 +79,7 @@ public class StatementService {
 			Double totalAmount = transactionRepository.getTotalAmountByDate(date);
 			Double rate = ruleRepository.getRateByDate(date);
 			if(totalAmount != null && rate != null) {
-				totalInterest = totalInterest + (totalAmount * (rate/100));
+				totalInterest = totalInterest + (totalAmount * (rate / 100));
 			}
 		}
 		totalInterest = totalInterest / Utility.getLengthOfYear();
@@ -71,15 +87,20 @@ public class StatementService {
 		
 		Transaction transaction = new Transaction();
 		transaction.setDate(lastDayOfMonth);
-		transaction.setTransactionType("I");
+		transaction.setTransactionType(CAP_I);
 		transaction.setAmount(amt);
 		transaction.setTotalAmount(totalAmt + amt);
-		transaction.setTransactionId("");
+		transaction.setTransactionId(EMPTY_STRING);
 		
 	    return transaction;
 	}
 	
 	
+	/**
+	 * Get start date of the account
+	 * @param accNo
+	 * @return
+	 */
 	public String getAccStartDate(final String accNo) {
 		return transactionRepository.findAccStartDate(accNo);
 	}

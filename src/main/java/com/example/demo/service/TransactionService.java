@@ -13,6 +13,11 @@ import com.example.demo.dto.TransactionDto;
 import com.example.demo.mapper.TransactionMapper;
 import com.example.demo.repository.TransactionRepository;
 
+import static com.example.demo.constant.Constants.CAP_W;
+import static com.example.demo.constant.Constants.CAP_D;
+import static com.example.demo.constant.Constants.HYPHEN;
+
+
 @Service
 public class TransactionService {
 	
@@ -23,23 +28,26 @@ public class TransactionService {
 	private PrintDataAdapter printData;
 	
 	
+	/**
+	 * Process Transaction
+	 * @param input
+	 */
 	public void processTransaction(final String input) {
 		Transaction transaction = null;
 		TransactionDto transactionDto = TransactionMapper.convertInputToTransactionDto(input);
 		
 		boolean isAccNoExist = transactionRepository.existsByAccNo(transactionDto.getAccNo());
 		
-		
-		if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), "W")) {
+		if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_W)) {
 			System.out.println("Cannot create the account as the tranaction type is Withdraw!!");
 			
-		} else if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), "D")) {
+		} else if(!isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_D)) {
 			transaction = TransactionMapper.convertToTransaction(
 					transactionDto, 
 					transactionDto.getAmount(), 
 					this.computeTransactionId(transactionDto.getDate()));
 			
-		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), "W")) {
+		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_W)) {
 			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getDate());
 			Double updateTotalAmount = totalAmount - transactionDto.getAmount();
 			if(updateTotalAmount < 0) {
@@ -50,7 +58,7 @@ public class TransactionService {
 						updateTotalAmount, 
 						this.computeTransactionId(transactionDto.getDate()));
 			}
-		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), "D")) {
+		} else if(isAccNoExist && StringUtils.equalsIgnoreCase(transactionDto.getTransactionType(), CAP_D)) {
 			Double totalAmount = transactionRepository.getTotalAmountByDate(transactionDto.getDate());
 			Double updateTotalAmount = totalAmount + transactionDto.getAmount();
 			transaction = TransactionMapper.convertToTransaction(
@@ -68,14 +76,19 @@ public class TransactionService {
 	}
 	
 	
+	/**
+	 * Compute transactionId
+	 * @param date
+	 * @return
+	 */
 	private String computeTransactionId(String date) {
 		String transactionId = transactionRepository.getTransactionIdByDate(date);
 		if(StringUtils.isNotEmpty(transactionId)) {
-			int id = Integer.valueOf(transactionId.split("-")[1])+1;
-			return date+"-"+id;
+			int id = Integer.valueOf(transactionId.split(HYPHEN)[1]) + 1;
+			return date + HYPHEN + String.format("%02d", id);
 		}
 		
-		return date+"-"+1;
+		return date + HYPHEN + 01;
 	}	
 
 }

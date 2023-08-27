@@ -6,20 +6,22 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.demo.constant.Constants.*;
+
 public class Utility {
 	
 	public static boolean validateAccType(final String accType) {
-		return accType.matches("^[dwDW]+$");
+		return accType.matches(ACC_TYPE_REGEX);
 	}
 
 	public static boolean validateAmount(final String amount) {
-		return amount.matches("^(?![.0]*$)\\d+(?:\\.\\d{2})?$");
+		return amount.matches(AMOUNT_REGEX);
 	}
 	
 	public static boolean validateDate(final String date) throws ParseException {
 		boolean isDateValid = false;
-		if(date.matches("[0-9]+") && date.length() == 8) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		if(date.matches(NUMBER_REGEX) && date.length() == 8) {
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			Date formatedDate = sdf.parse(date);
 			isDateValid = sdf.format(formatedDate).equals(date) && new Date().after(formatedDate);
 		}
@@ -28,12 +30,12 @@ public class Utility {
 	}
 	
 	public static boolean validateInterestRate(final String interestRate) {
-		return interestRate.matches("^(?!0*(\\.0+)?$)([0-9]|[1-9][0-9])(\\.[0-9]{1,2})?$");
+		return interestRate.matches(INTEREST_RATE_REGEX);
 	}
 	
 	
 	public static boolean validateMonth(final String month) {
-		return month.matches("(^0?[1-9]$)|(^1[0-2]$)");
+		return month.matches(MONTH_REGEX);
 	}
 	
 	

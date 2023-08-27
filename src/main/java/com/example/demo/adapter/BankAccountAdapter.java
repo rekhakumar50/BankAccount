@@ -13,6 +13,8 @@ import com.example.demo.service.RuleService;
 import com.example.demo.service.TransactionService;
 import com.example.demo.util.Utility;
 
+import static com.example.demo.constant.Constants.*;
+
 @Component
 public class BankAccountAdapter implements CommandLineRunner {
 	
@@ -42,16 +44,16 @@ public class BankAccountAdapter implements CommandLineRunner {
 	private void processOptions() throws ParseException {
 		String line = this.getOptions();
         switch(line.toLowerCase()) {
-	        case "i":
+	        case I:
 				this.inputTransaction();
 	            break;
-	        case "d":
+	        case D:
 	        	this.interestRules();
 	        	break;
-	        case "p":
+	        case P:
 	        	this.printStatement();
 	        	break;
-	        case "q":
+	        case Q:
 	        	System.out.print("Thank you for banking with AwesomeGIC Bank.\r\n"
 	        			+ "Have a nice day!");
 	        	System.exit(1);
@@ -91,12 +93,12 @@ public class BankAccountAdapter implements CommandLineRunner {
 	 * @throws ParseException
 	 */
 	private void validatePrintStatement(final String input) throws ParseException {
-		if(StringUtils.containsNone(input, "|")) {
+		if(StringUtils.containsNone(input, PIPE)) {
 			System.out.println("Enter Valid Input");
 			this.printStatement();
 		}
 		
-		String[] inputArr = StringUtils.split(input, "|");
+		String[] inputArr = StringUtils.split(input, PIPE);
 		if(inputArr.length != 2) {
 			System.out.println("Enter Valid Input");
 			this.printStatement();
@@ -105,7 +107,7 @@ public class BankAccountAdapter implements CommandLineRunner {
 		String month = inputArr[1];
 		
 		if(!Utility.validateMonth(month)) {
-			System.out.println("Enter valid month");
+			System.out.println("Enter Valid Month");
 			this.printStatement();
 		} else {
 			String accStartDate = statementService.getAccStartDate(accNo);
@@ -116,7 +118,7 @@ public class BankAccountAdapter implements CommandLineRunner {
 					this.printStatement();
 				}
 			} else {
-				System.out.println("Enter valid Account Number");
+				System.out.println("Enter Valid Account Number");
 				this.printStatement();
 			}
 		}
@@ -149,12 +151,12 @@ public class BankAccountAdapter implements CommandLineRunner {
 	 * @throws ParseException
 	 */
 	private void validateInputTransaction(final String input) throws ParseException {
-		if(StringUtils.containsNone(input, "|")) {
+		if(StringUtils.containsNone(input, PIPE)) {
 			System.out.println("Enter Valid Input");
 			this.inputTransaction();
 		}
 		
-		String[] inputArr = StringUtils.split(input, "|");
+		String[] inputArr = StringUtils.split(input, PIPE);
 		if(inputArr.length != 4) {
 			System.out.println("Enter Valid Input");
 			this.inputTransaction();
@@ -169,7 +171,7 @@ public class BankAccountAdapter implements CommandLineRunner {
 		}
 		
 		if(!Utility.validateAmount(inputArr[3])) {
-			System.out.println("Enter valid amount");
+			System.out.println("Enter Valid Amount");
 		}
 		
 		if(!(Utility.validateDate(inputArr[0]) && Utility.validateAccType(inputArr[2]) && Utility.validateAmount(inputArr[3]))) {
@@ -204,12 +206,12 @@ public class BankAccountAdapter implements CommandLineRunner {
 	 * @throws ParseException
 	 */
 	private void validateInterestRules(final String input) throws ParseException {
-		if(StringUtils.containsNone(input, "|")) {
+		if(StringUtils.containsNone(input, PIPE)) {
 			System.out.println("Enter Valid Input");
 			this.inputTransaction();
 		}
 		
-		String[] inputArr = StringUtils.split(input, "|");
+		String[] inputArr = StringUtils.split(input, PIPE);
 		if(inputArr.length != 3) {
 			System.out.println("Enter Valid Input");
 			this.inputTransaction();

@@ -23,6 +23,10 @@ public class RuleService {
 	private PrintDataAdapter printData;
 	
 	
+	/**
+	 * Input new Rule and update existing Rule
+	 * @param input
+	 */
 	public void processRules(final String input) {
 		Rule rule = null;
 		RuleDto ruleDto = RuleMapper.convertInputToRuleDto(input);
@@ -40,7 +44,6 @@ public class RuleService {
 			List<Rule> rules = ruleRepository.findAll();
 			printData.printRuleTable(rules);
 		}
-		
 	}
 
 }

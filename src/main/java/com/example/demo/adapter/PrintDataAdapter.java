@@ -10,6 +10,13 @@ import com.example.demo.dao.Transaction;
 @Component
 public class PrintDataAdapter {
 	
+	
+	/**
+	 * Print Transactions in table format
+	 * 
+	 * @param accNo
+	 * @param transactions
+	 */
 	public void printTransactionTable(final String accNo, final List<Transaction> transactions) {
 		System.out.println("Account: " + accNo);
 		System.out.println("------------------------------------------------------------------------------------------");
@@ -25,6 +32,11 @@ public class PrintDataAdapter {
 	}
 	
 	
+	/**
+	 * Print Rules in table format
+	 * 
+	 * @param rules
+	 */
 	public void printRuleTable(final List<Rule> rules) {
 		System.out.println("Interest rules:");
 		System.out.println("---------------------------------------------------");
@@ -39,6 +51,12 @@ public class PrintDataAdapter {
 	}
 		
 	
+	/**
+	 * Print Statements in table format
+	 * 
+	 * @param accNo
+	 * @param transactions
+	 */
 	public void printStatementTable(final String accNo, final List<Transaction> transactions) {
 		System.out.println("Account: " + accNo);
 		System.out.println("---------------------------------------------------------------------------------------------------");
@@ -54,7 +72,7 @@ public class PrintDataAdapter {
             		transaction.getTotalAmount());
             System.out.println();
         }
-        System.out.println("----------------------------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------------------");
 	}
 
 }
