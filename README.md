@@ -8,4 +8,4 @@ To start application from Maven: <br>
 1. After cloning the repo, go to the project folder <br>
 2. run "mvn install" to build the application <br>
 3. once build is success, go to the target folder of the project and run the command "java -jar BankAccount-0.0.1-SNAPSHOT.jar" <br>
-Used MySQL as the database
+4. Used MySQL as the database
