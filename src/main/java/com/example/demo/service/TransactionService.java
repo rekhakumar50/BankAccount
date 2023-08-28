@@ -89,6 +89,21 @@ public class TransactionService {
 		}
 		
 		return date + HYPHEN + String.format("%02d", 1);
-	}	
+	}
+	
+	
+	/**
+	 * Get start date of the account
+	 * @param accNo
+	 * @return
+	 */
+	public String getAccStartDate(final String accNo) {
+		return transactionRepository.findAccStartDate(accNo);
+	}
+	
+	
+	public boolean isAccExist(final String accNo) {
+		return transactionRepository.existsByAccNo(accNo);
+	}
 
 }

@@ -57,9 +57,16 @@ public class Utility {
 	}
 	
 	
-	public static boolean isNotEndOfCurrentMonth(int month) {
+	public static boolean isNotEndOfCurrentMonth(final int month) {
 		return Calendar.getInstance().get(Calendar.DATE) < Utility.getLastDayOfMonth(Integer.valueOf(month) - 1)
 				&& month == Calendar.getInstance().get(Calendar.MONTH) + 1;
 	}
+	
+	
+	public static boolean isDateBefore(final String startDate, final String currentDate) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+		return sdf.parse(startDate).before(sdf.parse(currentDate));
+	}
+	
 	
 }

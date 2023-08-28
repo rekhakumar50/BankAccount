@@ -181,6 +181,17 @@ public class BankAccountAdapter implements CommandLineRunner {
 		if(!(Utility.validateDate(inputArr[0]) && Utility.validateAccType(inputArr[2]) && Utility.validateAmount(inputArr[3]))) {
 			this.inputTransaction();
 		}
+		
+		String accNo = inputArr[1];
+		boolean isAccNoExist = transactionService.isAccExist(accNo);
+		if(isAccNoExist) {
+			String accStartDate = transactionService.getAccStartDate(accNo);
+			if(!Utility.isDateBefore(accStartDate, inputArr[0])) {
+				System.out.println("Account started on " + accStartDate + ". Please enter valid transaction date");
+				this.inputTransaction();
+			}
+		}
+
 	}
 
 	
